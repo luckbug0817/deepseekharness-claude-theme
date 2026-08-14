@@ -11,37 +11,52 @@ describe('Claude theme token contract', () => {
       'claude-sandstone': {
         colorScheme: 'light',
         tokens: expect.objectContaining({
-          '--claude-base': expect.any(String),
-          '--claude-layer': expect.any(String),
-          '--claude-overlay': expect.any(String),
-          '--claude-border-l1': expect.any(String),
-          '--claude-border-l2': expect.any(String),
-          '--claude-brand-primary': expect.any(String),
-          '--claude-label-primary': expect.any(String),
-          '--claude-label-secondary': expect.any(String),
-          '--claude-state-success': expect.any(String),
-          '--claude-state-warn': expect.any(String),
-          '--claude-state-error': expect.any(String),
-          '--claude-sidebar-fill': expect.any(String),
+          '--dsw-alias-bg-base': expect.any(String),
+          '--dsw-alias-bg-layer-1': expect.any(String),
+          '--dsw-alias-bg-overlay': expect.any(String),
+          '--dsw-alias-border-l1': expect.any(String),
+          '--dsw-alias-border-l2': expect.any(String),
+          '--dsw-alias-brand-primary': expect.any(String),
+          '--dsw-alias-label-primary': expect.any(String),
+          '--dsw-alias-label-secondary': expect.any(String),
+          '--dsw-alias-state-success-primary': expect.any(String),
+          '--dsw-alias-state-warn-primary': expect.any(String),
+          '--dsw-alias-state-error-primary': expect.any(String),
         }),
       },
       'claude-ink': {
         colorScheme: 'dark',
         tokens: expect.objectContaining({
-          '--claude-base': expect.any(String),
-          '--claude-layer': expect.any(String),
-          '--claude-overlay': expect.any(String),
-          '--claude-border-l1': expect.any(String),
-          '--claude-border-l2': expect.any(String),
-          '--claude-brand-primary': expect.any(String),
-          '--claude-label-primary': expect.any(String),
-          '--claude-label-secondary': expect.any(String),
-          '--claude-state-success': expect.any(String),
-          '--claude-state-warn': expect.any(String),
-          '--claude-state-error': expect.any(String),
-          '--claude-sidebar-fill': expect.any(String),
+          '--dsw-alias-bg-base': expect.any(String),
+          '--dsw-alias-bg-layer-1': expect.any(String),
+          '--dsw-alias-bg-overlay': expect.any(String),
+          '--dsw-alias-border-l1': expect.any(String),
+          '--dsw-alias-border-l2': expect.any(String),
+          '--dsw-alias-brand-primary': expect.any(String),
+          '--dsw-alias-label-primary': expect.any(String),
+          '--dsw-alias-label-secondary': expect.any(String),
+          '--dsw-alias-state-success-primary': expect.any(String),
+          '--dsw-alias-state-warn-primary': expect.any(String),
+          '--dsw-alias-state-error-primary': expect.any(String),
         }),
       },
     })
+  })
+
+  it('uses Harness semantic alias names, not a private palette namespace', () => {
+    for (const theme of Object.values(CLAUDE_THEMES)) {
+      expect(Object.keys(theme.tokens)).toEqual(expect.arrayContaining([
+        '--dsw-alias-bg-base',
+        '--dsw-alias-bg-layer-1',
+        '--dsw-alias-bg-overlay',
+        '--dsw-alias-border-l1',
+        '--dsw-alias-brand-primary',
+        '--dsw-alias-label-primary',
+        '--dsw-alias-state-success-primary',
+        '--dsw-alias-state-warn-primary',
+        '--dsw-alias-state-error-primary',
+      ]))
+      expect(Object.keys(theme.tokens).every(name => name.startsWith('--dsw-'))).toBe(true)
+    }
   })
 })

@@ -1,50 +1,39 @@
-/** One named color scheme supplied to the Harness theme registry. */
+/** One selectable Harness color scheme. */
 export interface ClaudeThemeDefinition {
   readonly colorScheme: 'light' | 'dark'
-  readonly tokens: Readonly<Record<string, string>>
+  readonly tokens: Readonly<Record<`--dsw-alias-${string}`, string>>
 }
 
-/** Semantic aliases shared by the light sandstone and dark ink themes. */
+/* Every semantic alias published by dsh-client-ui-theme's design-platform.css.
+ * The two maps intentionally override aliases (rather than internal palette
+ * variables) because ThemeRuntime presents them as its public extension API. */
 const sandstoneTokens = {
-  '--claude-base': '#f7f5f2',
-  '--claude-layer': '#fffdf9',
-  '--claude-overlay': '#ffffff',
-  '--claude-border-l1': '#e6e0d8',
-  '--claude-border-l2': '#d5ccc1',
-  '--claude-brand-primary': '#c15f3c',
-  '--claude-label-primary': '#292522',
-  '--claude-label-secondary': '#6e665f',
-  '--claude-state-success': '#2f7d59',
-  '--claude-state-warn': '#a96811',
-  '--claude-state-error': '#b64038',
-  '--claude-sidebar-fill': '#efebe5',
+  '--dsw-alias-bg-base': '#f7f5f2', '--dsw-alias-bg-layer-1': '#fffdf9', '--dsw-alias-bg-layer-2': '#f3eee8', '--dsw-alias-bg-layer-3': '#ebe5dd', '--dsw-alias-bg-mask-1': 'rgba(41,37,34,.24)', '--dsw-alias-bg-mask-2': 'rgba(41,37,34,.12)', '--dsw-alias-bg-mask-3': 'rgba(41,37,34,.48)', '--dsw-alias-bg-mask-drop': 'rgba(255,253,249,.72)', '--dsw-alias-bg-mask-photo': 'rgba(41,37,34,.88)', '--dsw-alias-bg-module-platform': '#efebe5', '--dsw-alias-bg-multi-select': '#efebe5', '--dsw-alias-bg-overlay': '#fffdf9', '--dsw-alias-bg-skeleton': 'rgba(41,37,34,.05)',
+  '--dsw-alias-border-inverted': 'rgba(255,253,249,.64)', '--dsw-alias-border-inverted2': 'rgba(255,253,249,.32)', '--dsw-alias-border-l1': '#e6e0d8', '--dsw-alias-border-l2': '#d5ccc1', '--dsw-alias-border-l2-darkmode-thin': '#d5ccc1', '--dsw-alias-border-l3': '#c3b8ac', '--dsw-alias-border-l4': '#aea195',
+  '--dsw-alias-brand-primary': '#c15f3c', '--dsw-alias-brand-primary-invert': '#fffdf9', '--dsw-alias-brand-primary-new-colorprimary-new-color': '#c15f3c', '--dsw-alias-brand-text': '#9f482c',
+  '--dsw-alias-button-contrast-fill': '#292522', '--dsw-alias-button-elevated-fill': '#fffdf9', '--dsw-alias-button-floating-fill': '#fffdf9', '--dsw-alias-button-floating-hover': '#f3eee8', '--dsw-alias-button-ghost-active-border': '#a99d91', '--dsw-alias-button-ghost-active-fill': '#eee7df', '--dsw-alias-button-ghost-active-hover': '#e6ddd3', '--dsw-alias-button-info-fill': '#c15f3c', '--dsw-alias-button-info-hover': '#a94d30', '--dsw-alias-button-primary-dimmed': '#f0d7ce', '--dsw-alias-button-primary-fill': '#c15f3c', '--dsw-alias-button-primary-hover': '#a94d30', '--dsw-alias-button-tool-bar-fill': 'rgba(41,37,34,.5)', '--dsw-alias-button-tool-bar-fill-invisible': 'rgba(41,37,34,.34)', '--dsw-alias-button-tool-bar-hover': 'rgba(41,37,34,.62)',
+  '--dsw-alias-interactive-bg-active': 'rgba(193,95,60,.16)', '--dsw-alias-interactive-bg-hover': 'rgba(41,37,34,.06)', '--dsw-alias-interactive-bg-hover-accent': 'rgba(193,95,60,.14)', '--dsw-alias-interactive-bg-hover-danger': 'rgba(182,64,56,.08)', '--dsw-alias-interactive-bg-hover-solid': '#eee7df',
+  '--dsw-alias-label-caption': '#8a8077', '--dsw-alias-label-dimmed': '#b2a79d', '--dsw-alias-label-primary': '#292522', '--dsw-alias-label-primary-bluish': '#292522', '--dsw-alias-label-primary-dimmed': '#4d4640', '--dsw-alias-label-primary-foreground': '#fffdf9', '--dsw-alias-label-primary-inverted': '#fffdf9', '--dsw-alias-label-secondary': '#6e665f', '--dsw-alias-label-tertiary': '#867d75',
+  '--dsw-alias-markdown-citation': '#eee7df', '--dsw-alias-markdown-code-block': '#f1ece5', '--dsw-alias-markdown-code-block-banner': '#e8e1d8', '--dsw-alias-markdown-code-segment-selected': '#fffdf9', '--dsw-alias-markdown-code-segment-unselected': '#eee7df', '--dsw-alias-markdown-inline-code': '#eee7df', '--dsw-alias-markdown-placeholder': '#e8e1d8', '--dsw-alias-markdown-tag': '#eee7df',
+  '--dsw-alias-scrollbar-bg-l1': '#cfc5ba', '--dsw-alias-scrollbar-bg-l2': '#bdb2a6', '--dsw-alias-scrollbar-hover-l1': '#a99d91', '--dsw-alias-scrollbar-hover-l2': '#94877a',
+  '--dsw-alias-state-business-primary': '#c15f3c', '--dsw-alias-state-business-tertiary': '#f0d7ce', '--dsw-alias-state-error-primary': '#b64038', '--dsw-alias-state-error-secondary': '#d7645c', '--dsw-alias-state-success-primary': '#2f7d59', '--dsw-alias-state-success-secondary': '#57a87c', '--dsw-alias-state-success-tertiary': '#dcefe5', '--dsw-alias-state-warn-label': '#8a530d', '--dsw-alias-state-warn-primary': '#a96811', '--dsw-alias-state-warn-secondary': '#d18a28', '--dsw-alias-state-warn-tertiary': '#f6e4c5', '--dsw-alias-toast-bg': '#292522', '--dsw-alias-tooltip-bg': '#322e2a',
 } as const
 
 const inkTokens = {
-  '--claude-base': '#1d1b1a',
-  '--claude-layer': '#272421',
-  '--claude-overlay': '#322e2a',
-  '--claude-border-l1': '#48413b',
-  '--claude-border-l2': '#60574f',
-  '--claude-brand-primary': '#e07b55',
-  '--claude-label-primary': '#f3eee8',
-  '--claude-label-secondary': '#c4bbb1',
-  '--claude-state-success': '#67b889',
-  '--claude-state-warn': '#e3a54b',
-  '--claude-state-error': '#e47a70',
-  '--claude-sidebar-fill': '#24211f',
+  '--dsw-alias-bg-base': '#1d1b1a', '--dsw-alias-bg-layer-1': '#272421', '--dsw-alias-bg-layer-2': '#322e2a', '--dsw-alias-bg-layer-3': '#3b3631', '--dsw-alias-bg-mask-1': 'rgba(0,0,0,.5)', '--dsw-alias-bg-mask-2': 'rgba(0,0,0,.28)', '--dsw-alias-bg-mask-3': 'rgba(0,0,0,.56)', '--dsw-alias-bg-mask-drop': 'rgba(29,27,26,.72)', '--dsw-alias-bg-mask-photo': 'rgba(0,0,0,.88)', '--dsw-alias-bg-module-platform': '#24211f', '--dsw-alias-bg-multi-select': '#2b2825', '--dsw-alias-bg-overlay': '#322e2a', '--dsw-alias-bg-skeleton': 'rgba(255,255,255,.08)',
+  '--dsw-alias-border-inverted': 'rgba(255,255,255,.1)', '--dsw-alias-border-inverted2': 'rgba(255,255,255,.16)', '--dsw-alias-border-l1': '#48413b', '--dsw-alias-border-l2': '#60574f', '--dsw-alias-border-l2-darkmode-thin': '#48413b', '--dsw-alias-border-l3': '#71675e', '--dsw-alias-border-l4': '#82766b',
+  '--dsw-alias-brand-primary': '#e07b55', '--dsw-alias-brand-primary-invert': '#1d1b1a', '--dsw-alias-brand-primary-new-colorprimary-new-color': '#e07b55', '--dsw-alias-brand-text': '#ee9a79',
+  '--dsw-alias-button-contrast-fill': '#f3eee8', '--dsw-alias-button-elevated-fill': '#322e2a', '--dsw-alias-button-floating-fill': '#322e2a', '--dsw-alias-button-floating-hover': '#3b3631', '--dsw-alias-button-ghost-active-border': '#82766b', '--dsw-alias-button-ghost-active-fill': '#3b3631', '--dsw-alias-button-ghost-active-hover': '#48413b', '--dsw-alias-button-info-fill': '#e07b55', '--dsw-alias-button-info-hover': '#ee9a79', '--dsw-alias-button-primary-dimmed': '#5b382f', '--dsw-alias-button-primary-fill': '#e07b55', '--dsw-alias-button-primary-hover': '#ee9a79', '--dsw-alias-button-tool-bar-fill': 'rgba(243,238,232,.28)', '--dsw-alias-button-tool-bar-fill-invisible': 'rgba(243,238,232,.18)', '--dsw-alias-button-tool-bar-hover': 'rgba(243,238,232,.38)',
+  '--dsw-alias-interactive-bg-active': 'rgba(224,123,85,.2)', '--dsw-alias-interactive-bg-hover': 'rgba(243,238,232,.08)', '--dsw-alias-interactive-bg-hover-accent': 'rgba(224,123,85,.18)', '--dsw-alias-interactive-bg-hover-danger': 'rgba(228,122,112,.14)', '--dsw-alias-interactive-bg-hover-solid': '#3b3631',
+  '--dsw-alias-label-caption': '#aaa097', '--dsw-alias-label-dimmed': '#766d65', '--dsw-alias-label-primary': '#f3eee8', '--dsw-alias-label-primary-bluish': '#f3eee8', '--dsw-alias-label-primary-dimmed': '#d4cbc2', '--dsw-alias-label-primary-foreground': '#1d1b1a', '--dsw-alias-label-primary-inverted': '#1d1b1a', '--dsw-alias-label-secondary': '#c4bbb1', '--dsw-alias-label-tertiary': '#aaa097',
+  '--dsw-alias-markdown-citation': '#3b3631', '--dsw-alias-markdown-code-block': '#171615', '--dsw-alias-markdown-code-block-banner': '#24211f', '--dsw-alias-markdown-code-segment-selected': '#322e2a', '--dsw-alias-markdown-code-segment-unselected': '#3b3631', '--dsw-alias-markdown-inline-code': '#3b3631', '--dsw-alias-markdown-placeholder': '#322e2a', '--dsw-alias-markdown-tag': '#3b3631',
+  '--dsw-alias-scrollbar-bg-l1': '#60574f', '--dsw-alias-scrollbar-bg-l2': '#71675e', '--dsw-alias-scrollbar-hover-l1': '#82766b', '--dsw-alias-scrollbar-hover-l2': '#94877a',
+  '--dsw-alias-state-business-primary': '#e07b55', '--dsw-alias-state-business-tertiary': '#5b382f', '--dsw-alias-state-error-primary': '#e47a70', '--dsw-alias-state-error-secondary': '#f0a29a', '--dsw-alias-state-success-primary': '#67b889', '--dsw-alias-state-success-secondary': '#93d0aa', '--dsw-alias-state-success-tertiary': '#294938', '--dsw-alias-state-warn-label': '#e9bd72', '--dsw-alias-state-warn-primary': '#e3a54b', '--dsw-alias-state-warn-secondary': '#f0c776', '--dsw-alias-state-warn-tertiary': '#594522', '--dsw-alias-toast-bg': '#f3eee8', '--dsw-alias-tooltip-bg': '#f3eee8',
 } as const
 
-/** The complete plugin-owned palette contract, keyed by Harness theme id. */
 export const CLAUDE_THEMES = {
-  'claude-sandstone': {
-    colorScheme: 'light',
-    tokens: sandstoneTokens,
-  },
-  'claude-ink': {
-    colorScheme: 'dark',
-    tokens: inkTokens,
-  },
+  'claude-sandstone': { colorScheme: 'light', tokens: sandstoneTokens },
+  'claude-ink': { colorScheme: 'dark', tokens: inkTokens },
 } as const satisfies Readonly<Record<string, ClaudeThemeDefinition>>
 
 export type ClaudeThemeId = keyof typeof CLAUDE_THEMES

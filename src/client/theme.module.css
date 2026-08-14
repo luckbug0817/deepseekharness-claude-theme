@@ -1,0 +1,30 @@
+/* Static CSS-module loading is owned by the Harness client-module loader.
+ * Every palette-facing declaration stays on public semantic aliases. */
+:global([data-composer-card]) {
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 18px;
+  background: var(--dsw-alias-bg-layer-1);
+}
+
+:global([data-composer-card]:focus-within) {
+  outline: 2px solid var(--dsw-alias-brand-primary);
+  outline-offset: 2px;
+}
+
+:global([data-input-scroll]) {
+  scrollbar-color: var(--dsw-alias-scrollbar-bg-l2) var(--dsw-alias-bg-layer-1);
+}
+
+:global([data-tool]) {
+  border-radius: 12px;
+  border-color: var(--dsw-alias-border-l1);
+}
+
+:global(.md-code-block) {
+  border-radius: 12px;
+  background: var(--dsw-alias-markdown-code-block);
+}
+
+:global([data-conversation-scroll]) {
+  scrollbar-color: var(--dsw-alias-scrollbar-bg-l1) var(--dsw-alias-bg-base);
+}
