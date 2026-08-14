@@ -6,6 +6,9 @@
     "strict": true,
     "declaration": true,
     "declarationDir": "lib/types",
+    "jsx": "react-jsx",
+    "types": ["node"],
+    "resolveJsonModule": true,
     "verbatimModuleSyntax": true,
     "skipLibCheck": true
   },

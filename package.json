@@ -16,26 +16,36 @@
   },
   "files": [
     "lib",
-    "CHANGELOG.md"
+    "docs/images",
+    "CHANGELOG.md",
+    "README.zh-CN.md"
   ],
   "dsh": {
     "client": {
       "platform": "web",
       "inject": [
-        "@deepseek-ai/dsh-client-ui-theme"
+        "@deepseek-ai/dsh-client-ui-theme",
+        "@deepseek-ai/dsh-client-ui-slots"
       ]
     }
   },
   "scripts": {
     "bundle": "tsdown",
+    "pretest": "npm run bundle",
     "prepack": "npm run bundle",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/react": "^18.2.0",
     "lightningcss": "1.30.2",
+    "react": "^18.2.0",
     "tsdown": "^0.22.2",
     "typescript": "^6.0.3",
     "vitest": "^4.1.8"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
   }
 }

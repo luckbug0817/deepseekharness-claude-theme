@@ -1,5 +1,7 @@
 # DeepSeek Claude Web Theme
 
+[简体中文](README.zh-CN.md) · English
+
 `deepseek-claude-web-theme` is a **static DeepSeek Harness (DSH) Web profile
 client plugin**. It registers two Claude-inspired appearance themes with a
 compatible Harness Web profile:
@@ -72,13 +74,28 @@ or environment may keep its own selected theme according to Harness's normal
 settings behavior. This plugin does not synchronize that choice between
 processes or users.
 
+The selector appears in **Settings → General**, below the built-in appearance
+mode. Choosing a Claude theme applies it immediately in the current browser;
+the selected button is marked as pressed. The selection is stored by the host
+settings service, so its persistence and scope follow that service's normal
+browser/profile behavior.
+
+## Gallery
+
+Real DSH Web captures from **Settings → General** with the selected option
+shown as pressed:
+
+| Claude Sandstone | Claude Ink |
+| --- | --- |
+| ![Claude Sandstone selected in DSH Web Settings](docs/images/sandstone.png) | ![Claude Ink selected in DSH Web Settings](docs/images/ink.png) |
+
 ## Privacy and assets
 
-The published package contains JavaScript and type declarations only; its CSS
-is bundled into `lib/client.js`. It makes no network requests, collects no user
-data, loads no remote fonts, and ships no images or other external assets.
-Styling uses that bundled CSS plus the semantic `--dsw-alias-*` tokens supplied
-by the profile's theme service.
+At runtime, the plugin uses bundled CSS in `lib/client.js` plus the semantic
+`--dsw-alias-*` tokens supplied by the profile's theme service. It makes no
+network requests, collects no user data, and loads no remote fonts or runtime
+images. The published archive also includes the local PNG screenshots under
+`docs/images/` solely so this README's gallery renders for package consumers.
 
 ## Manual Web smoke test
 
@@ -115,6 +132,8 @@ core.
 ```sh
 npm test
 npm run typecheck
-npm run bundle
 npm pack --dry-run
 ```
+
+`npm test` runs the bundle step first, so the bundled-client assertions also
+work from a fresh clone after `npm ci`.
