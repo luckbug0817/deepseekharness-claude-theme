@@ -74,6 +74,21 @@ or environment may keep its own selected theme according to Harness's normal
 settings behavior. This plugin does not synchronize that choice between
 processes or users.
 
+The selector appears in **Settings → General**, below the built-in appearance
+mode. Choosing a Claude theme applies it immediately in the current browser;
+the selected button is marked as pressed. The selection is stored by the host
+settings service, so its persistence and scope follow that service's normal
+browser/profile behavior.
+
+## Gallery
+
+Real DSH Web captures from **Settings → General** with the selected option
+shown as pressed:
+
+| Claude Sandstone | Claude Ink |
+| --- | --- |
+| ![Claude Sandstone selected in DSH Web Settings](docs/images/sandstone.png) | ![Claude Ink selected in DSH Web Settings](docs/images/ink.png) |
+
 ## Privacy and assets
 
 The published package contains JavaScript and type declarations only; its CSS

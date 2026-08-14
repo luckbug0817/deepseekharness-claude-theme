@@ -54,6 +54,16 @@ npm install /absolute/path/to/deepseek-claude-web-theme-0.1.0.tgz
 
 主题会注册到加载该客户端的 Web 进程中，因此外观选择是进程本地的：不同 Web 进程、浏览器 Profile 或环境会按 Harness 的正常设置行为分别保留自己的选择。本插件不会在进程或用户之间同步设置。
 
+选择器位于 **设置 → 通用设置**，在内置外观模式下方。选择 Claude 主题后会立即应用到当前浏览器，当前选择的按钮会显示为按下状态。选择结果由宿主设置服务保存，因此其持久化与作用范围遵循该服务在当前浏览器/Profile 中的正常行为。
+
+## 截图
+
+以下为 DSH Web **设置 → 通用设置** 的真实截图，已选主题的按钮显示为按下状态：
+
+| Claude Sandstone | Claude Ink |
+| --- | --- |
+| ![在 DSH Web 设置中选中 Claude Sandstone](docs/images/sandstone.png) | ![在 DSH Web 设置中选中 Claude Ink](docs/images/ink.png) |
+
 ## 隐私与资源
 
 发布包只包含 JavaScript 与类型声明；CSS 已打包进 `lib/client.js`。它不会发起网络请求、不收集用户数据、不加载远程字体，也不包含图片或其他外部资源。样式仅使用打包 CSS 与 Profile 主题服务提供的语义化 `--dsw-alias-*` 令牌。
