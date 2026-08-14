@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { readFile } from 'node:fs/promises'
 import manifest from '../package.json' with { type: 'json' }
 import { apply, inject, THEME_STYLESHEET } from '../src/client/index.js'
 import { ThemeSelectorRow } from '../src/client/ThemeSelectorRow.js'
@@ -7,6 +8,13 @@ type ThemeButton = { props: { children: string; 'aria-pressed': boolean; onClick
 type ThemeSelectorTree = { props: { children: [unknown, { props: { children: ThemeButton[] } }] } }
 
 describe('Claude Web client plugin', () => {
+  it('exports CSS module class names in the bundled client', async () => {
+    const bundle = await readFile(new URL('../lib/client.js', import.meta.url), 'utf8')
+
+    expect(bundle).toMatch(/["']?themeSelector["']?\s*:\s*['"][^'"]+_themeSelector/)
+    expect(bundle).toMatch(/["']?themeSelectorOption["']?\s*:\s*['"][^'"]+_themeSelectorOption/)
+  })
+
   it('uses the host React 18 runtime as a peer dependency', () => {
     expect(manifest.peerDependencies.react).toBe('^18.2.0')
     expect(manifest.devDependencies.react).toBe('^18.2.0')

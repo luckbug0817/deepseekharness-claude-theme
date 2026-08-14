@@ -32,7 +32,10 @@ export default defineConfig([
         if (!id.startsWith(CSS_PREFIX)) return null
         const filename = id.slice(CSS_PREFIX.length, -CSS_SUFFIX.length)
         this.addWatchFile(filename)
-        const { code } = transform({ filename, code: await readFile(filename), cssModules: true, minify: true })
+        const { code, exports } = transform({ filename, code: await readFile(filename), cssModules: true, minify: true })
+        const classes = Object.fromEntries(
+          Object.entries(exports ?? {}).map(([name, value]) => [name, value.name]),
+        )
         const tagId = `deepseek-claude-web-theme/${basename(filename)}`
         return [
           `const css = ${JSON.stringify(code.toString())};`,
@@ -44,7 +47,7 @@ export default defineConfig([
           '  tag.textContent = css;',
           '  document.head.appendChild(tag);',
           '}',
-          'export default {};',
+          `export default ${JSON.stringify(classes)};`,
         ].join('\n')
       },
     }],
