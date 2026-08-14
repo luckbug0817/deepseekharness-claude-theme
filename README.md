@@ -74,10 +74,11 @@ processes or users.
 
 ## Privacy and assets
 
-The package contains TypeScript/JavaScript and a local CSS stylesheet only. It
-makes no network requests, collects no user data, loads no remote fonts, and
-ships no images or other external assets. Styling uses local CSS plus the
-semantic `--dsw-alias-*` tokens supplied by the profile's theme service.
+The published package contains JavaScript and type declarations only; its CSS
+is bundled into `lib/client.js`. It makes no network requests, collects no user
+data, loads no remote fonts, and ships no images or other external assets.
+Styling uses that bundled CSS plus the semantic `--dsw-alias-*` tokens supplied
+by the profile's theme service.
 
 ## Manual Web smoke test
 
