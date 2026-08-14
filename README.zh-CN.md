@@ -66,7 +66,7 @@ npm install /absolute/path/to/deepseek-claude-web-theme-0.1.0.tgz
 
 ## 隐私与资源
 
-发布包只包含 JavaScript 与类型声明；CSS 已打包进 `lib/client.js`。它不会发起网络请求、不收集用户数据、不加载远程字体，也不包含图片或其他外部资源。样式仅使用打包 CSS 与 Profile 主题服务提供的语义化 `--dsw-alias-*` 令牌。
+运行时，插件只使用打包在 `lib/client.js` 中的 CSS，以及 Profile 主题服务提供的语义化 `--dsw-alias-*` 令牌。它不会发起网络请求、不收集用户数据、不加载远程字体或运行时图片。发布归档还会包含 `docs/images/` 下的本地 PNG 截图，仅用于让包使用者查看本 README 的图集。
 
 ## 手动 Web 冒烟测试
 

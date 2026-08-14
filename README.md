@@ -91,11 +91,11 @@ shown as pressed:
 
 ## Privacy and assets
 
-The published package contains JavaScript and type declarations only; its CSS
-is bundled into `lib/client.js`. It makes no network requests, collects no user
-data, loads no remote fonts, and ships no images or other external assets.
-Styling uses that bundled CSS plus the semantic `--dsw-alias-*` tokens supplied
-by the profile's theme service.
+At runtime, the plugin uses bundled CSS in `lib/client.js` plus the semantic
+`--dsw-alias-*` tokens supplied by the profile's theme service. It makes no
+network requests, collects no user data, and loads no remote fonts or runtime
+images. The published archive also includes the local PNG screenshots under
+`docs/images/` solely so this README's gallery renders for package consumers.
 
 ## Manual Web smoke test
 
