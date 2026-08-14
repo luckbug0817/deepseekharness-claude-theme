@@ -1,18 +1,35 @@
-import type { ThemeRuntime } from '../client-contract.js'
+import type { ThemeSelectorContext } from '../client-contract.js'
 import { CLAUDE_THEMES } from '../tokens.js'
+import { ConnectedThemeSelectorRow } from './ThemeSelectorRow.js'
 import './theme.module.css'
 
 /** Required Cordis dependency: the Loader parks this Fiber until available. */
-export const inject = ['theme'] as const
+export const inject = ['theme', 'slots'] as const
 
 /**
  * Browser plugin body. Both registrations belong to this client's Fiber:
  * Context.effect owns their ThemeRuntime disposers on reload or unmount.
  */
-export function apply(ctx: { theme: ThemeRuntime; effect(effect: () => void | (() => void), label?: string): void }): void {
+export function apply(ctx: ThemeSelectorContext): void {
   for (const [id, theme] of Object.entries(CLAUDE_THEMES)) {
     ctx.effect(() => ctx.theme.register({ id, ...theme }), `claude-web-theme: ${id}`)
   }
+
+  let notify = (): void => {}
+  ctx.effect(() => ctx.on('theme/change', () => { notify() }), 'claude-web-theme: theme selector listener')
+  ctx.slots.inject('settings.general.item', () => ctx.slots.register({
+    name: 'settings.general.item',
+    id: 'claude-theme-selector',
+    order: 15,
+    inject: () => ({
+      getTheme: () => ctx.theme.getTheme(),
+      subscribe: (listener: () => void) => {
+        notify = listener
+        return () => { if (notify === listener) notify = () => {} }
+      },
+      setTheme: (id: string) => { ctx.theme.setTheme(id) },
+    }),
+  }, ConnectedThemeSelectorRow))
 }
 
 /** Test-visible source contract; the bundled CSS module performs static loading. */

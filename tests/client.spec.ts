@@ -1,9 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { apply, inject, THEME_STYLESHEET } from '../src/client/index.js'
+import { ThemeSelectorRow } from '../src/client/ThemeSelectorRow.js'
+
+type ThemeButton = { props: { children: string; 'aria-pressed': boolean; onClick: () => void } }
+type ThemeSelectorTree = { props: { children: [unknown, { props: { children: ThemeButton[] } }] } }
 
 describe('Claude Web client plugin', () => {
   it('declares theme injection so the Cordis loader parks it before apply', () => {
-    expect(inject).toEqual(['theme'])
+    expect(inject).toEqual(['theme', 'slots'])
   })
 
   it('has a loader-shaped gate that avoids invoking apply until theme exists', () => {
@@ -17,7 +21,7 @@ describe('Claude Web client plugin', () => {
 
     expect(mount({})).toBe('parked')
     expect(applyCalls).toBe(0)
-    expect(mount({ theme: {} })).toBe('active')
+    expect(mount({ theme: {}, slots: {} })).toBe('active')
     expect(applyCalls).toBe(1)
   })
 
@@ -35,6 +39,11 @@ describe('Claude Web client plugin', () => {
         const dispose = effect()
         if (dispose !== undefined) effects.push(dispose)
       },
+      on: () => () => {},
+      slots: {
+        inject: (_name: string, callback: () => () => void) => { callback(); return () => {} },
+        register: () => () => {},
+      },
     }
 
     apply(ctx as never)
@@ -43,6 +52,65 @@ describe('Claude Web client plugin', () => {
     expect(registered.map(theme => theme.colorScheme)).toEqual(['light', 'dark'])
     for (const dispose of effects.reverse()) dispose()
     expect(registered).toEqual([])
+  })
+
+  it('registers a selector that reads, switches, syncs, and disposes through public services', () => {
+    let active = 'claude-sandstone'
+    const setThemeCalls: string[] = []
+    let changeListener: ((snapshot: { preference: string }) => void) | undefined
+    let slotDisposed = false
+    let listenerDisposed = false
+    let selector: unknown
+    let slotInjection: (() => () => void) | undefined
+    const effectDisposers: Array<() => void> = []
+    const ctx = {
+      theme: {
+        register: () => () => {},
+        getTheme: () => ({ preference: active }),
+        setTheme: (id: string) => { setThemeCalls.push(id) },
+      },
+      slots: {
+        inject: (_name: string, callback: () => () => void) => {
+          slotInjection = callback
+          return () => { slotInjection = undefined }
+        },
+        register: (_options: { name: string; id: string; order: number }, component: typeof selector) => {
+          selector = component
+          return () => { slotDisposed = true }
+        },
+      },
+      on: (_name: 'theme/change', listener: (snapshot: { preference: string }) => void) => {
+        changeListener = listener
+        return () => { listenerDisposed = true }
+      },
+      effect: (effect: () => void | (() => void)) => {
+        const dispose = effect()
+        if (dispose !== undefined) effectDisposers.push(dispose)
+      },
+    }
+
+    apply(ctx as never)
+    expect(slotInjection).toBeTypeOf('function')
+    const disposeRegistration = slotInjection?.()
+    expect(selector).toBeTypeOf('function')
+
+    const sandstone = ThemeSelectorRow({ preference: active, setTheme: ctx.theme.setTheme }) as ThemeSelectorTree
+    const buttons = sandstone.props.children[1].props.children
+    expect(buttons.map(button => (button.props.children as unknown as Array<{ props: { children: string } }>)[0].props.children))
+      .toEqual(['Claude Sandstone', 'Claude Ink'])
+    expect(buttons.map(button => button.props['aria-pressed'])).toEqual([true, false])
+    buttons[1].props.onClick()
+    expect(setThemeCalls).toEqual(['claude-ink'])
+
+    active = 'claude-ink'
+    changeListener?.({ preference: active })
+    const ink = ThemeSelectorRow({ preference: active, setTheme: ctx.theme.setTheme }) as ThemeSelectorTree
+    expect(ink.props.children[1].props.children.map(button => button.props['aria-pressed'])).toEqual([false, true])
+
+    for (const dispose of effectDisposers) dispose()
+    disposeRegistration?.()
+    expect(listenerDisposed).toBe(true)
+    expect(slotDisposed).toBe(true)
   })
 
   it('ships a local semantic stylesheet with only verified targets', () => {

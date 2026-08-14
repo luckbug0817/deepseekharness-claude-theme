@@ -6,6 +6,7 @@
     "strict": true,
     "declaration": true,
     "declarationDir": "lib/types",
+    "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
     "skipLibCheck": true
   },
