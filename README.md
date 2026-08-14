@@ -1,5 +1,7 @@
 # DeepSeek Claude Web Theme
 
+[简体中文](README.zh-CN.md) · English
+
 `deepseek-claude-web-theme` is a **static DeepSeek Harness (DSH) Web profile
 client plugin**. It registers two Claude-inspired appearance themes with a
 compatible Harness Web profile:
