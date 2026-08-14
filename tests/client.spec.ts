@@ -62,6 +62,7 @@ describe('Claude Web client plugin', () => {
     let listenerDisposed = false
     let selector: unknown
     let slotInjection: (() => () => void) | undefined
+    let activeRegistration: (() => void) | undefined
     const effectDisposers: Array<() => void> = []
     const ctx = {
       theme: {
@@ -72,7 +73,10 @@ describe('Claude Web client plugin', () => {
       slots: {
         inject: (_name: string, callback: () => () => void) => {
           slotInjection = callback
-          return () => { slotInjection = undefined }
+          return () => {
+            slotInjection = undefined
+            activeRegistration?.()
+          }
         },
         register: (_options: { name: string; id: string; order: number }, component: typeof selector) => {
           selector = component
@@ -91,7 +95,7 @@ describe('Claude Web client plugin', () => {
 
     apply(ctx as never)
     expect(slotInjection).toBeTypeOf('function')
-    const disposeRegistration = slotInjection?.()
+    activeRegistration = slotInjection?.()
     expect(selector).toBeTypeOf('function')
 
     const sandstone = ThemeSelectorRow({ preference: active, setTheme: ctx.theme.setTheme }) as ThemeSelectorTree
@@ -108,9 +112,9 @@ describe('Claude Web client plugin', () => {
     expect(ink.props.children[1].props.children.map(button => button.props['aria-pressed'])).toEqual([false, true])
 
     for (const dispose of effectDisposers) dispose()
-    disposeRegistration?.()
     expect(listenerDisposed).toBe(true)
     expect(slotDisposed).toBe(true)
+    expect(slotInjection).toBeUndefined()
   })
 
   it('ships a local semantic stylesheet with only verified targets', () => {

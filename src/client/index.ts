@@ -17,7 +17,7 @@ export function apply(ctx: ThemeSelectorContext): void {
 
   let notify = (): void => {}
   ctx.effect(() => ctx.on('theme/change', () => { notify() }), 'claude-web-theme: theme selector listener')
-  ctx.slots.inject('settings.general.item', () => ctx.slots.register({
+  ctx.effect(() => ctx.slots.inject('settings.general.item', () => ctx.slots.register({
     name: 'settings.general.item',
     id: 'claude-theme-selector',
     order: 15,
@@ -29,7 +29,7 @@ export function apply(ctx: ThemeSelectorContext): void {
       },
       setTheme: (id: string) => { ctx.theme.setTheme(id) },
     }),
-  }, ConnectedThemeSelectorRow))
+  }, ConnectedThemeSelectorRow)), 'claude-web-theme: theme selector slot')
 }
 
 /** Test-visible source contract; the bundled CSS module performs static loading. */
