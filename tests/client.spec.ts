@@ -1,7 +1,26 @@
 import { describe, expect, it } from 'vitest'
-import { apply, THEME_STYLESHEET } from '../src/client/index.js'
+import { apply, inject, THEME_STYLESHEET } from '../src/client/index.js'
 
 describe('Claude Web client plugin', () => {
+  it('declares theme injection so the Cordis loader parks it before apply', () => {
+    expect(inject).toEqual(['theme'])
+  })
+
+  it('has a loader-shaped gate that avoids invoking apply until theme exists', () => {
+    let applyCalls = 0
+    const plugin = { inject, apply: () => { applyCalls += 1 } }
+    const mount = (services: Record<string, unknown>): 'parked' | 'active' => {
+      if (!plugin.inject.every(name => name in services)) return 'parked'
+      plugin.apply()
+      return 'active'
+    }
+
+    expect(mount({})).toBe('parked')
+    expect(applyCalls).toBe(0)
+    expect(mount({ theme: {} })).toBe('active')
+    expect(applyCalls).toBe(1)
+  })
+
   it('registers both selectable themes through the public theme service', () => {
     const registered: Array<{ id: string; colorScheme: string; tokens: Record<string, string> }> = []
     const effects: Array<() => void> = []

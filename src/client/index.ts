@@ -2,6 +2,9 @@ import type { ThemeRuntime } from '../client-contract.js'
 import { CLAUDE_THEMES } from '../tokens.js'
 import './theme.module.css'
 
+/** Required Cordis dependency: the Loader parks this Fiber until available. */
+export const inject = ['theme'] as const
+
 /**
  * Browser plugin body. Both registrations belong to this client's Fiber:
  * Context.effect owns their ThemeRuntime disposers on reload or unmount.

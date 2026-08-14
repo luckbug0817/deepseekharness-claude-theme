@@ -3,8 +3,10 @@
 This is a static DeepSeek Harness Web client plugin. Add it to a compatible
 Harness Web profile together with `@deepseek-ai/dsh-client-ui-theme`; the
 profile must expose the public `ctx.theme.register(definition)` service before
-this plugin activates. The package's `dsh.client.inject` declaration expresses
-that ordering requirement.
+this plugin activates. The client entry exports `inject = ['theme']`, which is
+the Cordis declaration that parks this Fiber until that service is available.
+The package manifest's `dsh.client.inject` mirrors the graph dependency for
+profile discovery; it does not order activation by itself.
 
 The package intentionally has no npm peer dependency on Harness internals.
 The current registry does not publish a complete independently resolvable
