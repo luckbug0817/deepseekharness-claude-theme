@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import manifest from '../package.json' with { type: 'json' }
 import { apply, inject, THEME_STYLESHEET } from '../src/client/index.js'
 import { ThemeSelectorRow } from '../src/client/ThemeSelectorRow.js'
 
@@ -6,6 +7,12 @@ type ThemeButton = { props: { children: string; 'aria-pressed': boolean; onClick
 type ThemeSelectorTree = { props: { children: [unknown, { props: { children: ThemeButton[] } }] } }
 
 describe('Claude Web client plugin', () => {
+  it('uses the host React 18 runtime as a peer dependency', () => {
+    expect(manifest.peerDependencies.react).toBe('^18.2.0')
+    expect(manifest.devDependencies.react).toBe('^18.2.0')
+    expect(manifest.devDependencies['@types/react']).toMatch(/^\^18\./)
+  })
+
   it('declares theme injection so the Cordis loader parks it before apply', () => {
     expect(inject).toEqual(['theme', 'slots'])
   })
