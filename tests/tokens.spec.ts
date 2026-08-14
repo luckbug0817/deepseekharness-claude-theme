@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { CLAUDE_THEMES } from '../src/tokens.js'
+import { apply, CLAUDE_THEMES } from '../src/index.js'
 
 describe('Claude theme token contract', () => {
+  it('exports a no-op node plugin entry for Harness composition', () => {
+    expect(apply()).toBeUndefined()
+  })
+
   it('provides the complete light and dark semantic token sets', () => {
     expect(CLAUDE_THEMES).toEqual({
       'claude-sandstone': {
