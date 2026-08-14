@@ -132,6 +132,8 @@ core.
 ```sh
 npm test
 npm run typecheck
-npm run bundle
 npm pack --dry-run
 ```
+
+`npm test` runs the bundle step first, so the bundled-client assertions also
+work from a fresh clone after `npm ci`.

@@ -94,6 +94,7 @@ npm uninstall deepseek-claude-web-theme
 ```sh
 npm test
 npm run typecheck
-npm run bundle
 npm pack --dry-run
 ```
+
+`npm test` 会先执行构建，因此在全新 clone 后运行 `npm ci` 再测试时，也会验证打包后的客户端。

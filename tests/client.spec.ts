@@ -8,6 +8,11 @@ type ThemeButton = { props: { children: string; 'aria-pressed': boolean; onClick
 type ThemeSelectorTree = { props: { children: [unknown, { props: { children: ThemeButton[] } }] } }
 
 describe('Claude Web client plugin', () => {
+  it('builds before tests and publishes the README gallery assets', () => {
+    expect(manifest.scripts.pretest).toBe('npm run bundle')
+    expect(manifest.files).toContain('docs/images')
+  })
+
   it('exports CSS module class names in the bundled client', async () => {
     const bundle = await readFile(new URL('../lib/client.js', import.meta.url), 'utf8')
 

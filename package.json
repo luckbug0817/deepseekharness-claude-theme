@@ -16,6 +16,7 @@
   },
   "files": [
     "lib",
+    "docs/images",
     "CHANGELOG.md",
     "README.zh-CN.md"
   ],
@@ -30,6 +31,7 @@
   },
   "scripts": {
     "bundle": "tsdown",
+    "pretest": "npm run bundle",
     "prepack": "npm run bundle",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
