@@ -35,4 +35,12 @@ describe('Claude Web client plugin', () => {
     expect(THEME_STYLESHEET).toMatch(/var\(--dsw-alias-[\w-]+\)/)
     expect(THEME_STYLESHEET).not.toMatch(/https?:|@import|url\(/i)
   })
+
+  it('uses mutually exclusive Firefox and WebKit scrollbar support paths', () => {
+    expect(THEME_STYLESHEET).toContain('@supports not selector(::-webkit-scrollbar)')
+    expect(THEME_STYLESHEET).toContain('@supports selector(::-webkit-scrollbar)')
+    expect(THEME_STYLESHEET).toContain('::-webkit-scrollbar-thumb')
+    expect(THEME_STYLESHEET).toMatch(/::-webkit-scrollbar-thumb[^}]*var\(--dsw-alias-scrollbar-bg-l1\)/)
+    expect(THEME_STYLESHEET).toMatch(/::-webkit-scrollbar-track[^}]*var\(--dsw-alias-bg-base\)/)
+  })
 })
