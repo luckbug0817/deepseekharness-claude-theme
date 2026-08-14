@@ -1,22 +1,119 @@
 # DeepSeek Claude Web Theme
 
-This is a static DeepSeek Harness Web client plugin. Add it to a compatible
-Harness Web profile together with `@deepseek-ai/dsh-client-ui-theme`; the
-profile must expose the public `ctx.theme.register(definition)` service before
-this plugin activates. The client entry exports `inject = ['theme']`, which is
-the Cordis declaration that parks this Fiber until that service is available.
-The package manifest's `dsh.client.inject` mirrors the graph dependency for
-profile discovery; it does not order activation by itself.
+`deepseek-claude-web-theme` is a **static DeepSeek Harness (DSH) Web profile
+client plugin**. It registers two Claude-inspired appearance themes with a
+compatible Harness Web profile:
 
-The package intentionally has no npm peer dependency on Harness internals.
-The current registry does not publish a complete independently resolvable
-Harness client dependency graph, so installing this package alone does not
-create a runnable Web profile. If activation reports that `theme` is absent,
-upgrade or repair the Harness profile so its UI-theme client plugin is composed
-and enabled, then restart the Web server.
+- `claude-sandstone` — light
+- `claude-ink` — dark
 
-Compatibility was checked against DeepSeek Harness master: external client
-packages are discovered from the profile's composed Loader entries by
-`dsh.client`, and the profile's config package is the resolution anchor for
-those entries. The static client uses the injected Cordis service rather than
-importing an internal implementation.
+It is a browser-side extension, not a standalone Web app and not a replacement
+for DeepSeek Harness. Its Node entry is intentionally a no-op; the bundled
+client entry waits for the profile's public `theme` service and registers the
+two themes through `ctx.theme.register()`.
+
+## Compatibility and scope
+
+Use this only with a DSH Web profile that already composes and enables
+`@deepseek-ai/dsh-client-ui-theme`, exposes the public
+`ctx.theme.register(definition)` service, and supports DSH client packages in
+its Loader/profile configuration. The manifest declares the same client
+dependency through `dsh.client.inject`.
+
+This package deliberately has **no npm peer dependency on DSH internals**.
+The public npm registry does not provide a complete independently resolvable
+DSH client dependency graph, so `npm install deepseek-claude-web-theme` alone
+does not create a runnable profile and is not a supported setup path.
+
+The plugin uses only that public theme service; it does not modify Harness core
+files. A profile must still decide which registered theme to apply.
+
+## Build and install into an existing profile
+
+Start with a working, compatible DSH Web profile supplied by your own Harness
+checkout or deployment. Do not attempt to bootstrap the profile by installing
+unpublished DSH packages from npm.
+
+From this package checkout:
+
+```sh
+npm ci
+npm run bundle
+npm pack
+```
+
+This creates `deepseek-claude-web-theme-0.1.0.tgz`. From the **configuration
+package that anchors your existing DSH profile's dependency resolution**, add
+that local archive:
+
+```sh
+npm install /absolute/path/to/deepseek-claude-web-theme-0.1.0.tgz
+```
+
+Then add `deepseek-claude-web-theme` to that profile's composed Web client
+Loader entries, alongside the already-enabled
+`@deepseek-ai/dsh-client-ui-theme` package. Preserve the profile's existing
+Loader syntax and package-resolution rules; they are owned by the compatible
+DSH runtime, not by this plugin. Restart the Web server after changing the
+profile configuration or its dependencies.
+
+If the plugin remains parked or reports that `theme` is unavailable, the
+profile has not composed the UI-theme client service correctly. Repair or
+upgrade that profile first; changing this package will not supply the missing
+DSH runtime.
+
+## Selecting a theme
+
+After restart, open the Harness Web **Appearance** settings and choose either
+**Claude Sandstone** (`claude-sandstone`) or **Claude Ink** (`claude-ink`). The
+theme is registered in the Web process that loads this client. Appearance
+selection is therefore process-local: a separate Web process, browser profile,
+or environment may keep its own selected theme according to Harness's normal
+settings behavior. This plugin does not synchronize that choice between
+processes or users.
+
+## Privacy and assets
+
+The package contains TypeScript/JavaScript and a local CSS stylesheet only. It
+makes no network requests, collects no user data, loads no remote fonts, and
+ships no images or other external assets. Styling uses local CSS plus the
+semantic `--dsw-alias-*` tokens supplied by the profile's theme service.
+
+## Manual Web smoke test
+
+The following test requires a compatible, runnable DSH Web profile; it cannot
+be validated from this package alone.
+
+1. Install and compose the package as described above, then restart the DSH
+   Web server.
+2. Open the Web UI and go to **Appearance**.
+3. Confirm both `claude-sandstone` and `claude-ink` are present.
+4. Select each theme in turn. Check that the page background, controls,
+   composer, code blocks, and conversation/input scrollbars update.
+5. Reload the page and confirm the selected theme remains selected according
+   to the profile's normal settings behavior.
+6. Disable/remove the plugin and restart; confirm the two Claude choices no
+   longer appear and an existing built-in theme can be selected.
+
+## Recovery and removal
+
+If a theme is undesirable, first select a built-in theme under **Appearance**.
+To remove the plugin, delete `deepseek-claude-web-theme` from the profile's
+composed Web client Loader entries, restart the Web server, and remove its
+local package dependency from the profile configuration package:
+
+```sh
+npm uninstall deepseek-claude-web-theme
+```
+
+No core file restoration is needed because this package does not patch Harness
+core.
+
+## Development checks
+
+```sh
+npm test
+npm run typecheck
+npm run bundle
+npm pack --dry-run
+```
